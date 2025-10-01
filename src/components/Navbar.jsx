@@ -6,28 +6,31 @@ export default function Navbar() {
   const { user, loginWithGoogle, logout } = useAuth();
 
   return (
-    <nav className="flex items-center justify-between p-4 bg-gray-800 text-white">
-      <div className="flex space-x-4">
-        <Link to="/" className="hover:underline">Home</Link>
-        <Link to="/favorites" className="hover:underline">Favorites</Link>
+    <nav className="flex items-center justify-between bg-gray-900 text-white px-6 py-3 shadow">
+      {/* Left side: links */}
+      <div className="flex gap-4">
+        <Link to="/" className="hover:text-blue-400">Home</Link>
+        <Link to="/favorites" className="hover:text-blue-400">Favorites</Link>
       </div>
 
-      <div className="flex items-center space-x-3">
+      {/* Right side: auth controls */}
+      <div className="flex items-center gap-4">
         {user ? (
           <>
-            <span className="text-sm">
-              {user.displayName || user.email}
-            </span>
-            {user.photoURL && (
-              <img
-                src={user.photoURL}
-                alt="profile"
-                className="w-8 h-8 rounded-full"
-              />
-            )}
+            {/* Avatar + email */}
+            <div className="flex items-center gap-2">
+              {user.photoURL && (
+                <img
+                  src={user.photoURL}
+                  alt="avatar"
+                  className="w-8 h-8 rounded-full border border-gray-700"
+                />
+              )}
+              <span className="text-sm">{user.displayName || user.email}</span>
+            </div>
             <button
               onClick={logout}
-              className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded"
+              className="bg-red-500 px-3 py-1 rounded hover:bg-red-600"
             >
               Logout
             </button>
@@ -35,7 +38,7 @@ export default function Navbar() {
         ) : (
           <button
             onClick={loginWithGoogle}
-            className="bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded"
+            className="bg-blue-500 px-3 py-1 rounded hover:bg-blue-600"
           >
             Login with Google
           </button>
