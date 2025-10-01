@@ -1,19 +1,40 @@
 import React from "react";
-import './App.css'; // <-- This imports Tailwind CSS
-import { auth, db, googleProvider } from "./firebase";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import Navbar from "./components/Navbar";
+import Login from "./components/Login";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
-function App() {
-  console.log("Auth:", auth);
-  console.log("DB:", db);
-  console.log("Google Provider:", googleProvider);
-
-  return (
-    <div className="text-center mt-10">
-      <h1 className="text-3xl font-bold text-blue-600">PitchStream ⚽</h1>
-      <p>Firebase is connected successfully 🎉</p>
-    </div>
-  );
+// Minimal placeholder pages
+function Home() {
+  return <div className="p-6">Home / Live scores placeholder</div>;
+}
+function MatchDetails() {
+  return <div className="p-6">Match Details - placeholder</div>;
+}
+function Favorites() {
+  return <div className="p-6">Favorites (protected)</div>;
 }
 
-export default App;
-
+export default function App() {
+  return (
+    <AuthProvider>
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/match/:id" element={<MatchDetails />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/favorites"
+            element={
+              <ProtectedRoute>
+                <Favorites />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
+  );
+}
