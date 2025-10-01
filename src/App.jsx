@@ -4,17 +4,9 @@ import { AuthProvider } from "./contexts/AuthContext";
 import Navbar from "./components/Navbar";
 import Login from "./components/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
-
-// Minimal placeholder pages
-function Home() {
-  return <div className="p-6">Home / Live scores placeholder</div>;
-}
-function MatchDetails() {
-  return <div className="p-6">Match Details - placeholder</div>;
-}
-function Favorites() {
-  return <div className="p-6">Favorites (protected)</div>;
-}
+import Home from "./components/Home"; // optional, if you create a separate file
+import MatchDetails from "./components/MatchDetails";
+import Favorites from "./components/Favorites";
 
 export default function App() {
   return (

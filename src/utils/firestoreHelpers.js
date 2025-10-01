@@ -1,18 +1,17 @@
+// src/utils/firestoreHelpers.js
 import { db } from "../firebase";
-import { doc, setDoc, deleteDoc, getDocs, collection } from "firebase/firestore";
+import { collection, addDoc, getDocs, query, where } from "firebase/firestore";
 
-export async function addFavorite(uid, match) {
-  const favRef = doc(db, "users", uid, "favorites", match.matchId);
-  await setDoc(favRef, match);
+// Add a match to the user's favorites
+export async function addFavorite(userId, match) {
+  const colRef = collection(db, "favorites");
+  await addDoc(colRef, { ...match, uid: userId, createdAt: new Date() });
 }
 
-export async function removeFavorite(uid, matchId) {
-  const favRef = doc(db, "users", uid, "favorites", matchId);
-  await deleteDoc(favRef);
-}
-
-export async function getFavorites(uid) {
-  const favsRef = collection(db, "users", uid, "favorites");
-  const snapshot = await getDocs(favsRef);
-  return snapshot.docs.map((doc) => doc.data());
+// Get all favorites for a user
+export async function getFavorites(userId) {
+  const colRef = collection(db, "favorites");
+  const q = query(colRef, where("uid", "==", userId));
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map(doc => ({ matchId: doc.id, ...doc.data() }));
 }
