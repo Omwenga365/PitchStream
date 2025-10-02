@@ -2,11 +2,11 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import Navbar from "./components/Navbar";
-import Login from "./components/Login";
-import ProtectedRoute from "./utils/ProtectedRoute";
-import Home from "./components/Home"; // optional, if you create a separate file
+import Home from "./components/Home";
 import MatchDetails from "./components/MatchDetails";
 import Favorites from "./components/Favorites";
+import Login from "./components/Login";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 export default function App() {
   return (
@@ -16,7 +16,6 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/match/:id" element={<MatchDetails />} />
-          <Route path="/login" element={<Login />} />
           <Route
             path="/favorites"
             element={
@@ -25,6 +24,7 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

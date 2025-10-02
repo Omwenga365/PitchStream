@@ -1,5 +1,5 @@
-import React from "react";
+import MatchesList from "./MatchesList";
 
 export default function Home() {
-  return <div className="p-6">Home / Live scores placeholder</div>;
+  return <MatchesList />;
 }

@@ -1,57 +1,45 @@
-import React, { useState } from "react";
-import { useAuth } from "../contexts/AuthContext";
-import { addFavorite } from "../utils/firestoreHelpers";
+// src/components/MatchesList.jsx
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-const sampleMatches = [
-  { id: "001", homeTeam: "Team A", awayTeam: "Team B", date: "2025-10-01" },
-  { id: "002", homeTeam: "Team C", awayTeam: "Team D", date: "2025-10-02" },
-  // Add more sample matches if needed
-];
+export default function MatchesList() {
+  const [matches, setMatches] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-export default function MatchDetails() {
-  const { user } = useAuth();
-  const [selectedMatch, setSelectedMatch] = useState(sampleMatches[0]);
+  useEffect(() => {
+    fetch("https://api.football-data.org/v4/matches", {
+      headers: { "X-Auth-Token": "ccd71791f0e348d8bb124648e6b1eaed" }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setMatches(data.matches || []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching matches:", err);
+        setLoading(false);
+      });
+  }, []);
 
-  const handleSelect = (e) => {
-    const match = sampleMatches.find((m) => m.id === e.target.value);
-    setSelectedMatch(match);
-  };
-
-  const handleAddFavorite = async () => {
-    if (!user) return alert("Please log in first.");
-    await addFavorite(user.uid, selectedMatch);
-    alert("Added to favorites!");
-  };
+  if (loading) return <div className="p-6">Loading matches...</div>;
+  if (!matches.length) return <div className="p-6">No matches found.</div>;
 
   return (
-    <div className="p-6 max-w-md mx-auto bg-white rounded shadow">
-      <h1 className="text-2xl font-bold mb-4 text-center">
-        {selectedMatch.homeTeam} vs {selectedMatch.awayTeam}
-      </h1>
-      <p className="text-gray-600 mb-4 text-center">Date: {selectedMatch.date}</p>
-
-      <label className="block mb-2 font-semibold" htmlFor="matchSelect">
-        Select Match:
-      </label>
-      <select
-        id="matchSelect"
-        className="w-full border border-gray-300 rounded px-3 py-2 mb-4 focus:outline-none focus:ring-2 focus:ring-blue-400"
-        onChange={handleSelect}
-        value={selectedMatch.id}
-      >
-        {sampleMatches.map((m) => (
-          <option key={m.id} value={m.id}>
-            {m.homeTeam} vs {m.awayTeam} ({m.date})
-          </option>
-        ))}
-      </select>
-
-      <button
-        className="w-full mt-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded shadow"
-        onClick={handleAddFavorite}
-      >
-        Add to Favorites
-      </button>
+    <div className="p-6 space-y-4">
+      {matches.map((match) => (
+        <div key={match.id} className="p-4 border rounded">
+          <p className="font-bold">
+            {match.homeTeam?.name} vs {match.awayTeam?.name}
+          </p>
+          <p>Date: {new Date(match.utcDate).toLocaleString()}</p>
+          <Link
+            to={`/match/${match.id}`}
+            className="text-blue-500 hover:underline"
+          >
+            View Details
+          </Link>
+        </div>
+      ))}
     </div>
   );
 }
