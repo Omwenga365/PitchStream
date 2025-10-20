@@ -1,11 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-/**
- * Simple reusable UI block
- * Usage:
- * <A title="My Title" subtitle="Optional" onAction={() => {}}>Content</A>
- */
+
 export default function A({ title = "Hello", subtitle, onAction, children }) {
     const handleClick = (e) => {
         if (typeof onAction === "function") onAction(e);

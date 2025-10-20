@@ -9,7 +9,7 @@ export default function MatchesList() {
   useEffect(() => {
     async function loadMatches() {
       try {
-        const res = await fetch("https://api.football-data.org/v4/matches", {
+        const res = await fetch("", {
           headers: { "X-Auth-Token": "ccd71791f0e348d8bb124648e6b1eaed" },
         });
 
