@@ -9,7 +9,7 @@ export default function MatchesList() {
   useEffect(() => {
     async function loadMatches() {
       try {
-        const res = await fetch("", {
+        const res = await fetch("ewewert", {
           headers: { "X-Auth-Token": "ccd71791f0e348d8bb124648e6b1eaed" },
         });
 
